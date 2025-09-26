@@ -1,0 +1,42 @@
+🖼️ IMAGE CROPPING GUIDE
+======================
+
+Your website is now set up to use your existing image files. Here's how to crop them:
+
+📁 CURRENT IMAGES TO CROP:
+-------------------------
+
+1. "ben barlow image 1.png" → Crop this for hero section and gallery
+   (This is Ben's main profile photo)
+
+2. "ben barlow progress.png" → Crop this for transformation story and gallery
+   (This is Ben's transformation/progress photo)
+
+📋 STEPS TO FOLLOW:
+------------------
+
+1. Open "image-cropper.html" in your browser
+2. Select "ben barlow image 1.png" and crop it
+3. Download the cropped version
+4. Replace the original file with the cropped version
+5. Repeat for "ben barlow progress.png"
+
+🎯 CROPPING TIPS:
+----------------
+
+✅ Remove blank space around the edges
+✅ Remove any red dots or unwanted elements
+✅ Keep the main subject centered
+✅ Use square or portrait ratios for best results
+✅ Try the "Auto Crop" button to remove 10% borders
+
+📱 CURRENT SETUP:
+----------------
+
+The website is currently using:
+- Hero section: "ben barlow image 1.png"
+- About section: "ben barlow progress.png"  
+- Transformation story: "ben barlow progress.png"
+- Gallery: Both images repeated
+
+Once you crop and replace these files, the website will automatically show the clean versions!

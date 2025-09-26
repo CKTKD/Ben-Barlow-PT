@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Cropper Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .image-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+        }
+        .image-section h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        .image-container {
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+        }
+        .original-image {
+            max-width: 300px;
+            max-height: 300px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        .cropped-image {
+            max-width: 300px;
+            max-height: 300px;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            margin-left: 20px;
+        }
+        .crop-controls {
+            margin: 10px 0;
+        }
+        .crop-controls label {
+            display: inline-block;
+            width: 80px;
+            font-weight: bold;
+        }
+        .crop-controls input {
+            width: 60px;
+            margin-right: 10px;
+        }
+        .crop-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .crop-button:hover {
+            background: #45a049;
+        }
+        .download-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .download-button:hover {
+            background: #1976D2;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .instructions h4 {
+            margin-top: 0;
+            color: #1976d2;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Image Cropper Tool</h1>
+        
+        <div class="instructions">
+            <h4>How to use this tool:</h4>
+            <ol>
+                <li>Select an image file using the file input</li>
+                <li>Adjust the crop coordinates (x, y, width, height)</li>
+                <li>Click "Crop Image" to see the result</li>
+                <li>Click "Download Cropped Image" to save it</li>
+                <li>Replace the original image file with the cropped version</li>
+            </ol>
+        </div>
+
+        <div class="image-section">
+            <h3>📸 Crop Your Images</h3>
+            <input type="file" id="imageInput" accept="image/*">
+            
+            <div class="crop-controls">
+                <label>X:</label>
+                <input type="number" id="cropX" value="0" min="0">
+                <label>Y:</label>
+                <input type="number" id="cropY" value="0" min="0">
+                <label>Width:</label>
+                <input type="number" id="cropWidth" value="300" min="1">
+                <label>Height:</label>
+                <input type="number" id="cropHeight" value="300" min="1">
+            </div>
+            
+            <button class="crop-button" onclick="cropImage()">✂️ Crop Image</button>
+            <button class="download-button" onclick="downloadImage()" id="downloadBtn" disabled>💾 Download Cropped Image</button>
+            
+            <div id="imagePreview"></div>
+        </div>
+
+        <div class="image-section">
+            <h3>📋 Quick Crop Presets</h3>
+            <p>Use these buttons for common crop ratios:</p>
+            <button class="crop-button" onclick="setCropPreset(0, 0, 400, 400)">Square (400x400)</button>
+            <button class="crop-button" onclick="setCropPreset(0, 0, 500, 300)">Landscape (500x300)</button>
+            <button class="crop-button" onclick="setCropPreset(0, 0, 300, 500)">Portrait (300x500)</button>
+            <button class="crop-button" onclick="setCropPreset(50, 50, 400, 400)">Center Crop (400x400)</button>
+        </div>
+    </div>
+
+    <script>
+        let currentImage = null;
+        let croppedCanvas = null;
+
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage = new Image();
+                    currentImage.onload = function() {
+                        displayImage();
+                    };
+                    currentImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function displayImage() {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = `
+                <div class="image-container">
+                    <h4>Original Image (${currentImage.width}x${currentImage.height})</h4>
+                    <img src="${currentImage.src}" class="original-image" alt="Original">
+                </div>
+                <div class="image-container">
+                    <h4>Cropped Image</h4>
+                    <canvas id="croppedCanvas" class="cropped-image" style="display: none;"></canvas>
+                    <img id="croppedPreview" class="cropped-image" style="display: none;" alt="Cropped">
+                </div>
+            `;
+            
+            // Set default crop values
+            document.getElementById('cropWidth').value = Math.min(400, currentImage.width);
+            document.getElementById('cropHeight').value = Math.min(400, currentImage.height);
+        }
+
+        function cropImage() {
+            if (!currentImage) {
+                alert('Please select an image first!');
+                return;
+            }
+
+            const x = parseInt(document.getElementById('cropX').value);
+            const y = parseInt(document.getElementById('cropY').value);
+            const width = parseInt(document.getElementById('cropWidth').value);
+            const height = parseInt(document.getElementById('cropHeight').value);
+
+            // Validate crop parameters
+            if (x < 0 || y < 0 || width <= 0 || height <= 0) {
+                alert('Invalid crop parameters!');
+                return;
+            }
+
+            if (x + width > currentImage.width || y + height > currentImage.height) {
+                alert('Crop area exceeds image boundaries!');
+                return;
+            }
+
+            // Create canvas for cropped image
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = width;
+            canvas.height = height;
+
+            // Draw cropped portion
+            ctx.drawImage(
+                currentImage,
+                x, y, width, height,
+                0, 0, width, height
+            );
+
+            // Display cropped image
+            const croppedPreview = document.getElementById('croppedPreview');
+            croppedPreview.src = canvas.toDataURL('image/png');
+            croppedPreview.style.display = 'block';
+
+            // Store canvas for download
+            croppedCanvas = canvas;
+
+            // Enable download button
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        function downloadImage() {
+            if (!croppedCanvas) {
+                alert('Please crop an image first!');
+                return;
+            }
+
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'cropped-image.png';
+            link.href = croppedCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function setCropPreset(x, y, width, height) {
+            document.getElementById('cropX').value = x;
+            document.getElementById('cropY').value = y;
+            document.getElementById('cropWidth').value = width;
+            document.getElementById('cropHeight').value = height;
+        }
+
+        // Auto-crop function for removing borders
+        function autoCrop() {
+            if (!currentImage) return;
+
+            // Simple auto-crop: remove 10% from each side
+            const marginX = Math.floor(currentImage.width * 0.1);
+            const marginY = Math.floor(currentImage.height * 0.1);
+            
+            const x = marginX;
+            const y = marginY;
+            const width = currentImage.width - (marginX * 2);
+            const height = currentImage.height - (marginY * 2);
+
+            setCropPreset(x, y, width, height);
+            cropImage();
+        }
+
+        // Add auto-crop button
+        document.addEventListener('DOMContentLoaded', function() {
+            const autoCropBtn = document.createElement('button');
+            autoCropBtn.className = 'crop-button';
+            autoCropBtn.innerHTML = '🎯 Auto Crop (Remove 10% borders)';
+            autoCropBtn.onclick = autoCrop;
+            document.querySelector('.crop-controls').appendChild(autoCropBtn);
+        });
+    </script>
+</body>
+</html>
