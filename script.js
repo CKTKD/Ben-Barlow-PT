@@ -48,6 +48,33 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
     
+    // Mobile menu toggle
+    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuToggle && navLinks) {
+        mobileMenuToggle.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            mobileMenuToggle.classList.toggle('active');
+        });
+        
+        // Close menu when clicking on a link
+        navLinks.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A') {
+                navLinks.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            }
+        });
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('active');
+                mobileMenuToggle.classList.remove('active');
+            }
+        });
+    }
+    
     // Add theme toggle event listener
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {

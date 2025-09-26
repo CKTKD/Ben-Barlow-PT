@@ -298,6 +298,10 @@ p {
     transition: all 0.3s ease;
 }
 
+.mobile-menu-toggle {
+    display: none;
+}
+
 [data-theme="dark"] .navbar {
     background: rgba(15, 23, 42, 0.95);
 }
@@ -1462,120 +1466,308 @@ p {
         padding: 0 15px;
     }
     
+    /* Mobile Navigation - Collapsible */
     .nav-content {
-        flex-direction: column;
-        gap: 1rem;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
     }
     
     .nav-links {
-        gap: 1rem;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-primary);
+        border-top: 1px solid var(--border-color);
+        flex-direction: column;
+        padding: 1rem;
+        gap: 0.5rem;
+        box-shadow: var(--shadow-medium);
     }
     
+    .nav-links.active {
+        display: flex;
+    }
+    
+    .nav-links a {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        transition: background-color 0.3s ease;
+    }
+    
+    .nav-links a:hover {
+        background: var(--bg-secondary);
+    }
+    
+    /* Mobile Menu Toggle */
+    .mobile-menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-primary);
+        cursor: pointer;
+        padding: 0.5rem;
+    }
+    
+    .mobile-menu-toggle i {
+        transition: transform 0.3s ease;
+    }
+    
+    .mobile-menu-toggle.active i {
+        transform: rotate(90deg);
+    }
+    
+    /* Reduce section padding significantly */
+    .hero {
+        padding: 80px 0 40px;
+    }
+    
+    .about,
+    .transformation-story,
+    .services,
+    .credentials,
+    .testimonials,
+    .gallery,
+    .partnership,
+    .contact {
+        padding: 40px 0;
+    }
+    
+    .section-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .section-header h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .section-header p {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+    }
+    
+    /* Compact content layouts */
     .hero-content {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: 2rem;
-    }
-    
-    .hero-text h1 {
-        font-size: 2.5rem;
-    }
-    
-    .transformation-timeline {
-        grid-template-columns: 1fr;
         gap: 1.5rem;
     }
     
-    .timeline-image img {
-        height: 200px;
-        object-fit: contain;
+    .hero-text h1 {
+        font-size: 2.2rem;
+        margin-bottom: 1rem;
     }
     
-    .comparison-container {
-        flex-direction: column;
+    .hero-text p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Reduce timeline spacing */
+    .transformation-timeline {
+        grid-template-columns: 1fr;
         gap: 1rem;
     }
     
+    .timeline-item {
+        padding: 1rem;
+    }
+    
+    .timeline-image img {
+        height: 150px;
+        object-fit: cover;
+    }
+    
+    .timeline-content h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .timeline-content p {
+        font-size: 0.85rem;
+    }
+    
+    /* Compact comparison */
+    .comparison-container {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
     .comparison-image img {
-        height: 250px;
+        height: 200px;
     }
     
     .comparison-info h4 {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
     }
     
     .comparison-info p {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
     
+    /* Reduce slideshow spacing */
     .transformation-intro {
-        padding: 1.5rem;
-        margin-bottom: 2rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .transformation-intro h2 {
+        font-size: 1.6rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .transformation-intro p {
+        font-size: 0.9rem;
     }
     
     .transformation-stats {
         grid-template-columns: 1fr;
-        gap: 1rem;
+        gap: 0.75rem;
     }
     
     .slide-content {
-        padding: 1.5rem;
+        padding: 1rem;
     }
     
     .slide-image img {
-        height: 200px;
-        max-width: 280px;
+        height: 180px;
+        max-width: 250px;
     }
     
+    .slide-text h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .slide-text p {
+        font-size: 0.85rem;
+    }
+    
+    /* Compact service cards */
     .services-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
+    .service-card {
+        padding: 1.25rem;
+    }
+    
+    .service-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .service-card p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Compact credentials */
     .credentials-grid {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
     
+    .credential-item {
+        padding: 1rem;
+    }
+    
+    .credential-item h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .credential-item p {
+        font-size: 0.85rem;
+    }
+    
+    /* Compact testimonials */
     .testimonials-grid {
         grid-template-columns: 1fr;
+        gap: 1rem;
     }
     
+    .testimonial-card {
+        padding: 1.25rem;
+    }
+    
+    .testimonial-card p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Compact progress section */
     .progress-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 1rem;
     }
     
     .progress-intro {
-        padding: 1.5rem;
-        margin-bottom: 2rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
     
     .progress-cta {
-        padding: 2rem;
+        padding: 1.5rem;
     }
     
+    /* Compact partnership */
     .partnership-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
     
+    .partnership-text h3 {
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .partnership-text p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Compact contact */
     .contact-content {
         grid-template-columns: 1fr;
-        gap: 2rem;
+        gap: 1.5rem;
     }
     
     .contact-info {
-        gap: 1.5rem;
+        gap: 1rem;
     }
     
+    .contact-item {
+        padding: 1.25rem;
+    }
+    
+    .contact-item h4 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .contact-item p {
+        font-size: 0.85rem;
+    }
+    
+    /* Compact footer */
     .footer-content {
         grid-template-columns: 1fr;
         text-align: center;
-        gap: 1.5rem;
+        gap: 1rem;
     }
     
     .footer-links {
         flex-wrap: wrap;
         justify-content: center;
+        gap: 1rem;
     }
     
     .footer-social {
@@ -1584,6 +1776,7 @@ p {
     
     .cta-buttons {
         justify-content: center;
+        gap: 0.75rem;
     }
     
     .theme-toggle {
